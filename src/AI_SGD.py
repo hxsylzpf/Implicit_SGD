@@ -53,7 +53,7 @@ def equation_to_solve_prime(xi, learning_rate_n, Y_n, X_n, Thetas_n, distr):
     set to zero to solve the implicit equation"""
 
     F_prime = -learning_rate_n * h(Thetas_n, X_n, distr) * \
-    h(xi*X_n, X_n, distr) * np.dot(X_n, X_n) - 1
+        h(xi*X_n, X_n, distr) * np.dot(X_n, X_n) - 1
     return(F_prime)
 
 

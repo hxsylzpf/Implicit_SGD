@@ -49,7 +49,32 @@ def plot_log_likelihood(log_likelihood):
 
     plt.figure()
     plt.plot(x_indices, y_log_likelihood)
-    plt.yscale('log')
+    plt.yscale('symlog')
     plt.xlabel("indice of iteration")
     plt.ylabel("log likelihood")
     plt.title("Log likelihood evolution during the training")
+
+
+def plot_distributions(y_predict, y_test):
+
+    """plot the histograms of y_predict and y_test"""
+
+    max_y = max(max(y_predict), max(y_test))
+    min_y = min(min(y_predict), min(y_test))
+    range_y = (min_y, max_y)
+
+    plt.figure()
+    plt.subplot(2, 1, 1)
+    plt.hist(y_predict, bins=50, range=range_y,
+             label="y_predict", color='orange')
+    plt.ylabel("nb of contracts")
+    plt.yscale('log')
+    plt.title("Distribution predicted vs real distribution")
+    plt.legend()
+
+    plt.subplot(2, 1, 2)
+    plt.hist(y_test, range=range_y,
+             label="y_test", color='green')
+    plt.xlabel("nb of damages")
+    plt.yscale('log')
+    plt.legend()
