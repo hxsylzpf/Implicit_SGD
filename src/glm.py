@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from AI_SGD import *
+import numpy as np
+import optimizer
 import metrics
 
 
@@ -14,6 +15,7 @@ class GLM(object):
         as a perceptron with the 'distr' used as the activation function)"""
 
     def __init__(self, distr='poisson', method='ai_sgd'):
+
         self.distr = distr
         self.method = method
         self.method_params = None
@@ -45,21 +47,33 @@ class GLM(object):
                 )
                     )
 
-    def fit(self, X_train, y_train, learning_rate_0, nb_iterations, gamma,
-            optimization_method):
+    def fit(self, X_train, y_train, learning_rate, **kwargs):
+
         """fit a glm to the training data with the specified method"""
 
         if self.method == 'ai_sgd':
 
-            ai_sgd = AI_SGD(learning_rate_0, nb_iterations, gamma)
+            nb_iterations = kwargs.get('nb_iterations', None)
+            gamma = kwargs.get('gamma', None)
+            optimization_method = kwargs.get('optimization_method', None)
+
+            Optimizer = optimizer.AI_SGD(learning_rate, nb_iterations, gamma)
             self.thetas_average, self.thetas_all = \
-            ai_sgd.run(y_train, X_train, self.distr, optimization_method)
-            self.thetas_last = np.array(self.thetas_all[nb_iterations-1:].T,
-                                        ndmin=1)
-            self.method_params = ai_sgd.get_params()
+                Optimizer.run(y_train, X_train, self.distr,
+                              optimization_method)
+
+        elif self.method == 'AdamOptimizer':
+
+            nb_epochs = kwargs.get('nb_epochs', None)
+            Optimizer = optimizer.AdamOptimizer(learning_rate, nb_epochs)
+            self.thetas_all = Optimizer.run(X_train.T, y_train.T, self.distr)
 
         else:
             raise ValueError("Method of fitting Unknown""")
+
+        self.thetas_last = np.array(self.thetas_all[-1].T,
+                                    ndmin=1)
+        self.method_params = Optimizer.get_params()
 
     def predict(self, X_test):
         """apply the model learned after fitting to the test set"""
