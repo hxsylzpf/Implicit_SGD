@@ -59,8 +59,8 @@ def plot_distributions(y_predict, y_test):
 
     """plot the histograms of y_predict and y_test"""
 
-    max_y = max(max(y_predict), max(y_test))
-    min_y = min(min(y_predict), min(y_test))
+    max_y = float(max(max(y_predict), max(y_test)))
+    min_y = float(min(min(y_predict), min(y_test)))
     range_y = (min_y, max_y)
 
     plt.figure()
@@ -73,7 +73,7 @@ def plot_distributions(y_predict, y_test):
     plt.legend()
 
     plt.subplot(2, 1, 2)
-    plt.hist(y_test, range=range_y,
+    plt.hist(y_test, bins=50, range=range_y,
              label="y_test", color='green')
     plt.xlabel("nb of damages")
     plt.yscale('log')

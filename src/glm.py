@@ -71,8 +71,8 @@ class GLM(object):
         else:
             raise ValueError("Method of fitting Unknown""")
 
-        self.thetas_last = np.array(self.thetas_all[-1].T,
-                                    ndmin=1)
+        #self.thetas_last = real_thetas
+        self.thetas_last = np.array(self.thetas_all[-1].T, ndmin=1)
         self.method_params = Optimizer.get_params()
 
     def predict(self, X_test):
@@ -110,4 +110,19 @@ class GLM(object):
                                                         self.distr)
 
         return(self.log_likelihood, self.loss_train, self.loss_test)
-        
+
+  
+real_thetas = np.array([-2.223848,
+                        .156882,
+                        1.056299,
+                        -.8487041,
+                        -.2053206,
+                        .1231854,
+                        -.4400609,
+                        .0797984,
+                        .1869484,
+                        .1268465,
+                        .030081,
+                        .1140853,
+                        .1411583])
+       
